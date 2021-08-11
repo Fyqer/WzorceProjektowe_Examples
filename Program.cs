@@ -1,26 +1,39 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Adapter
+namespace Obserwator
 {
     class Program
     {
         static void Main(string[] args)
         {
-            // za pomoc adaptera laczymy niekompatybilne klasy ze soba i mozemy sie odwolwyac do ich metod
-           
-                Adaptee adaptee = new Adaptee();
-                ITarget target = new Adapter(adaptee);
+            //tworzymy obiekt klasy Czujnik
+            Czujnik czujnikNumerDwa = new Czujnik();
 
-                Console.WriteLine("Adaptee interface is incompatible with the client.");
-                Console.WriteLine("But with adapter client can call it's method.");
+            //dodajemy obiekty zainteresowane odczytem z obiektu czujnikNumerDwa
+            Urzadzenie urzadzenie1 = new Urzadzenie(czujnikNumerDwa);
+            Urzadzenie urzadzenie2 = new Urzadzenie(czujnikNumerDwa);
 
-                Console.WriteLine(target.GetRequest());
+            czujnikNumerDwa.dodajObserwatora(urzadzenie1);
+            czujnikNumerDwa.dodajObserwatora(urzadzenie2);
 
-            Console.ReadKey(); ;
+            //odczytujemy temperature
+            czujnikNumerDwa.dokonajPomiaru(22);
+
+            //zaszla zmiana, wiec powiadamy obserwatorow
+            czujnikNumerDwa.powiadomObserwatorow();
+
+            //zalozmy ze jeden z obserwatorow nie jest juz zainteresowany temperatura
+            czujnikNumerDwa.usunObserwator(urzadzenie1);
+
+            //odczytujemy temperature
+            czujnikNumerDwa.dokonajPomiaru(12);
+
+            //zaszla zmiana, wiec powiadamy obserwatorow
+            czujnikNumerDwa.powiadomObserwatorow();
+
+
+            Console.ReadLine();
         }
     }
-}
+    }
+
